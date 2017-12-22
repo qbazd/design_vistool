@@ -202,8 +202,8 @@ vec3 HeatMapColor(float value, float minValue, float maxValue)
 
 
 void main() {
-
-    vs_out.disk_size = vec3(disk_size_in / screen_hw.x, disk_size_in / screen_hw.y, disk_size_in);
+    
+    vs_out.disk_size = vec3(disk_size_in / screen_hw.x, disk_size_in / screen_hw.y, disk_size_in) *2.0;
     vs_out.color = HeatMapColor(color_in, vis_min_max.x, vis_min_max.y);
 
     vec2 pos = position - (screen_offset * vec2(-1.0,1.0));
