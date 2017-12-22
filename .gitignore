@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+design_vistool
+design_vistool.so
+design_vistool.dylib
+design_vistool.dll
+design_vistool.a
+design_vistool.lib
+design_vistool-test-*
+*.exe
+*.o
+*.obj
+*.lst

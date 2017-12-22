@@ -1,0 +1,9 @@
+{
+	"fileVersion": 1,
+	"versions": {
+		"derelict-gl3": "2.0.0-beta.5",
+		"derelict-util": "3.0.0-beta.2",
+		"design_io": {"path":"../design_io"},
+		"gtk-d": "3.6.6"
+	}
+}

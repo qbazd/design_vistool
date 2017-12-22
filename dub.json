@@ -1,0 +1,21 @@
+{
+	"name": "design_vistool",
+	"authors": [
+		"qbazd"
+	],
+	"description": "DESIgn visualisation tool",
+	"copyright": "Copyright © 2017, qbazd",
+	"license": "proprietary",
+    "lflags-windows": ["-subsystem:windows","-entry:mainCRTStartup"],
+    "versions": ["console"],
+    "dependencies": {
+        "design_io": {
+            "version": "~master",
+            "path": "../design_io"
+        },
+        "gtk-d:gtkd": "~>3.6.0",
+        "derelict-gl3": "~>2.0.0-beta"
+    }
+
+    
+}
