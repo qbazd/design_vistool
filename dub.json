@@ -1,21 +1,23 @@
 {
 	"name": "design_vistool",
 	"authors": [
-		"qbazd"
+		"Jakub Zdroik"
 	],
 	"description": "DESIgn visualisation tool",
-	"copyright": "Copyright © 2017, qbazd",
-	"license": "proprietary",
+    "copyright": "Copyright © 2017, Jakub Zdroik",
+    "license": "proprietary",
     "lflags-windows": ["-subsystem:windows","-entry:mainCRTStartup"],
-    "versions": ["console"],
+    "sourcePaths": ["./source","./glamour/glamour"],
+    "versions": [ "Derelict3", "gl3n" , "console"],
     "dependencies": {
         "design_io": {
             "version": "~master",
             "path": "../design_io"
         },
         "gtk-d:gtkd": "~>3.6.0",
+        "gl3n": "~>1.3.1",
         "derelict-gl3": "~>2.0.0-beta"
     }
 
-    
+
 }
