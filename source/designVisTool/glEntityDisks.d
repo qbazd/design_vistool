@@ -6,6 +6,14 @@ import std.random;
 
 import designVisTool.gl;
 
+import glamour.gl;
+import glamour.vao: VAO;
+import glamour.shader: Shader;
+import glamour.vbo: Buffer, ElementBuffer;
+
+import gl3n.linalg;
+import gl3n.math;
+
 
 struct disk_t {
   GLfloat [2] position;

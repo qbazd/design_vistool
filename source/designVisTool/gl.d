@@ -1,6 +1,6 @@
 module designVisTool.gl;
 
-public import derelict.opengl;
+import glamour.gl;
 
 import std.string;
 import std.stdio;

@@ -276,6 +276,7 @@ class MainWindow : ApplicationWindow
 
   void updateGui(){
     if (!dvtc.isOpen) return;
+    if (!glvis.realized) return;
 
     if (timestep_adj_updatable){
       timestep_adj.configure(dvtc.frameId, dvtc.frameMin, dvtc.frameMax, 1.0, 1.0, 1.0);
@@ -287,8 +288,9 @@ class MainWindow : ApplicationWindow
     //writeln(dvtc.dsv.ds.timesteps[dvtc.frameId] );
     auto far = dvtc.dsv.getFrame(dvtc.dsv.ds.timesteps[dvtc.frameId]);
     //writeln(far[0..16]);
-    
-    //glvis.entity_disks.update_geometry(far);
+    //assert(far !is  null);
+    //assert(glvis.gl_disks !is null);
+    glvis.gl_disks.update_geometry(far);
     
     glvis.queueDraw();
   }

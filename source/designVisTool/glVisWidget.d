@@ -12,7 +12,7 @@ import gdk.GLContext;
 import gdk.FrameClock;
 
 import designVisTool.gl;
-//import designVisTool.glDisksEntity;
+import designVisTool.glDisksEntity;
 import designVisTool.glPrimEntities;
 
 import glamour.gl;
@@ -29,8 +29,10 @@ class glVisWidget : GLArea
  
   long last_render_frame_time;
   long framerate_max;
+  bool realized = false;
+
   glBoxEntity gl_box;
-  //glEntity2 glent2;
+  glDisks gl_disks;
   GLContext con;
 
   vec2 screen_size = vec2(200.0,200.0);
@@ -97,15 +99,19 @@ public:
   {
     makeCurrent();
     gl_box = new glBoxEntity();
-//    glent2 = new glEntity2();
+    gl_disks = new glDisks();
+    realized = true;
 
     version(console) writeln("realize gl ok");
   }
 
   void unrealize(Widget)
   {
+    realized = false;
+
     makeCurrent();
     gl_box.close(); gl_box = null;
+    gl_disks.close(); gl_disks = null;
 //    glent2.close(); glent2 = null;
 
     version(console) writeln("unrealize gl ok");
@@ -139,6 +145,8 @@ public:
     gl_box.draw(mvp * mat4.identity().scale(100.0,50.0,1.0));
     gl_box.draw(mvp * mat4.identity().scale(50.0, 25.0,1.0).translate(50.0, 25.0, 0.0f));
     gl_box.draw(mvp * mat4.identity().scale(50.0, 25.0,1.0).translate(-50.0, -25.0, 0.0f));
+
+    gl_disks.draw(mvp);
 
     //glent2.draw(mvp);
     // hud.render();
