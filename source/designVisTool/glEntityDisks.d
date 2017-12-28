@@ -6,6 +6,7 @@ import std.random;
 
 import designVisTool.gl;
 
+
 struct disk_t {
   GLfloat [2] position;
   GLfloat disk_size;
@@ -32,7 +33,7 @@ struct glDisks{
   struct shader_params_t{
     float [2] screen_wh = [800.0f,800.0f];
     float border_size = 1.0f;
-    float [2] vis_min_max =        [0.0f,0.0f];
+    float [2] vis_min_max =        [0.0f,100.0f];
     float [2] screen_offset =      [0.0f,0.0f];
     float [2] screen_offset_drag = [0.0f,0.0f];
   };
@@ -56,23 +57,22 @@ struct glDisks{
     vertex_data.length = arr.length/4;
 
     for (size_t i = 0; i < vertex_data.length; i++ ){
-      vertex_data[i].position[0] = arr[(i * 4) + 0] / 20.0;
-      vertex_data[i].position[1] = arr[(i * 4) + 1] / 20.0;
+      vertex_data[i].position[0] = arr[(i * 4) + 0] / 10.0;
+      vertex_data[i].position[1] = arr[(i * 4) + 1] / 10.0;
       vertex_data[i].disk_size =   arr[(i * 4) + 2] / 10.0;
-      vertex_data[i].color =       arr[(i * 4) + 3];
+      vertex_data[i].color =       arr[(i * 4) + 3] ;
     }
+
 /+ 
     vertex_data.length = 10000;
-
     for (size_t i = 0; i < vertex_data.length; i++){
-
       vertex_data[i].position[0] = uniform( 0.0L, 800.0L, rnd);
       vertex_data[i].position[1] = uniform( 0.0L, 800.0L, rnd);
       vertex_data[i].disk_size =   uniform(10.0L,  20.0L, rnd);
       vertex_data[i].color =       uniform( 0.0L,   1.0L, rnd);
-
     }
 +/    
+
   }
 
   void clear_geometry(){
