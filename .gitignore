@@ -9,6 +9,8 @@ design_vistool.dll
 design_vistool.a
 design_vistool.lib
 design_vistool-test-*
+dub_platform_probe-*
+
 *.exe
 *.o
 *.obj
