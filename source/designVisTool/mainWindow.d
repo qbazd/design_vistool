@@ -287,7 +287,8 @@ class MainWindow : ApplicationWindow
     //writeln(dvtc.dsv.ds.timesteps[dvtc.frameId] );
     auto far = dvtc.dsv.getFrame(dvtc.dsv.ds.timesteps[dvtc.frameId]);
     //writeln(far[0..16]);
-    glvis.entity_disks.update_geometry(far);
+    
+    //glvis.entity_disks.update_geometry(far);
     
     glvis.queueDraw();
   }
