@@ -222,7 +222,7 @@ class MainWindow : ApplicationWindow
     super(application);
     setTitle("DESIgn visualistion tool");
     setup();
-//    resize (800, 800);
+    resize (800, 800);
     showAll();
   }
 
