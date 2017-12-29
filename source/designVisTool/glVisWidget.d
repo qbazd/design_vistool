@@ -102,6 +102,11 @@ public:
     gl_disks = new glDisks();
     realized = true;
 
+    // init winwdow
+    space_scale = 1.0;
+    space_delta = screen_size / 2.0;
+    mvp_update();
+
     version(console) writeln("realize gl ok");
   }
 
@@ -145,6 +150,8 @@ public:
     gl_box.draw(mvp * mat4.identity().scale(100.0,50.0,1.0));
     gl_box.draw(mvp * mat4.identity().scale(50.0, 25.0,1.0).translate(50.0, 25.0, 0.0f));
     gl_box.draw(mvp * mat4.identity().scale(50.0, 25.0,1.0).translate(-50.0, -25.0, 0.0f));
+
+    gl_disks.params.space_scale = space_scale;
 
     gl_disks.draw(mvp);
 

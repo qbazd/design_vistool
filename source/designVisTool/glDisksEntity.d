@@ -23,7 +23,7 @@ class glDisks{
 
 // change to vec2
   struct shader_params_t{
-    float border_size = 0.1f;
+    float border_size = 0.9f;
     float alpha = 1.0f;
     float [2] vis_min_max =    [0.0f,100.0f];
     float [3 * 10] color_map = [
@@ -35,6 +35,7 @@ class glDisks{
       1.00, 0.00, 0.00,
     ];
     int color_map_len = 6;
+    float space_scale = 1.0;
   };
 
   shader_params_t params;
@@ -118,6 +119,7 @@ class glDisks{
 
       program_.uniform1f("border_size", params.border_size);
       program_.uniform1f("alpha", params.alpha);
+      program_.uniform1f("space_scale", params.space_scale);
       program_.uniform2f("vis_min_max", params.vis_min_max[0],params.vis_min_max[1]);
       program_.uniform("mvp", mvp);
 
@@ -212,6 +214,7 @@ fragment:
   uniform float border_size;
   uniform vec3 color_map[10];
   uniform int color_map_len;
+  uniform float space_scale;
 
   in vec2  quadCoord;
   in float disk_size;
@@ -233,16 +236,17 @@ fragment:
   void main()
   {
       float disk_r = disk_size / 2.0;
-      float r = sqrt(pow(quadCoord.x,2) + pow(quadCoord.y,2)) * 2.0 * disk_r;
-      //float border_size = 5.0;
+      float r = sqrt(pow(quadCoord.x,2) + pow(quadCoord.y,2)) * disk_size;
+
       vec3 disk_color = HeatMapColor(fColor, vis_min_max.x, vis_min_max.y);
       vec3 bordercolor = vec3(0.0f,0.1f,0.2f);
 
-      float al = clamp2(r, disk_r , disk_r - 1.0, 0.0, 1.0);
-      float mix_ar = clamp2(r, disk_r - border_size, disk_r - 1.0 - border_size, 0.0, 1.0); 
+      float alias_factor = 1.0 * (1.0/space_scale);
+      float bs = border_size * (1.0/space_scale);
+      float edge0 = smoothstep(disk_r, disk_r - alias_factor , r);
+      float edge1 = smoothstep(disk_r - bs, disk_r - alias_factor-bs, r);
 
-      outputColor = vec4(mix(bordercolor, disk_color, mix_ar), al * alpha);
-
+      outputColor = vec4(mix(bordercolor, disk_color, edge1), edge0);
   }
 };
 
