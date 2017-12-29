@@ -272,7 +272,10 @@ public:
 
   void onResize( int width,  int height, GLArea glarea){
     //version(console){ writeln("resize");}
+    auto wc_00 = sc2wc(screen_size / 2.0);
     screen_size = vec2 (width, height);
+    mvp_update();
+    space_delta += (screen_size / 2.0) - wc2sc(wc_00);
     mvp_update();
   }
 
