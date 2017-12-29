@@ -26,6 +26,15 @@ class glDisks{
     float border_size = 0.1f;
     float alpha = 1.0f;
     float [2] vis_min_max =    [0.0f,100.0f];
+    float [3 * 10] color_map = [
+      0.32, 0.00, 0.32,
+      0.00, 0.00, 1.00,
+      0.00, 1.00, 0.00,
+      1.00, 1.00, 0.00,
+      1.00, 0.60, 0.00,
+      1.00, 0.00, 0.00,
+    ];
+    int color_map_len = 6;
   };
 
   shader_params_t params;
@@ -34,6 +43,8 @@ class glDisks{
   VAO vao_;
   Shader program_;
   Buffer vbo_;
+
+
   
   auto rnd = Random(42);
 
@@ -55,10 +66,10 @@ class glDisks{
     disks.length = 20000;
 
     for (size_t i = 0; i < disks.length; i++){
-      disks[i].position[0] = uniform( 0.0L, 800.0L, rnd);
-      disks[i].position[1] = uniform( 0.0L, 800.0L, rnd);
+      disks[i].position[0] = uniform( -500.0L, 500.0L, rnd);
+      disks[i].position[1] = uniform( -500.0L, 500.0L, rnd);
       disks[i].disk_size =   uniform(10.0L,  20.0L, rnd);
-      disks[i].color =       uniform( 0.0L,   1.0L, rnd);
+      disks[i].color =       uniform( params.vis_min_max[0],   params.vis_min_max[1], rnd);
     }
 
   }
@@ -110,6 +121,9 @@ class glDisks{
       program_.uniform2f("vis_min_max", params.vis_min_max[0],params.vis_min_max[1]);
       program_.uniform("mvp", mvp);
 
+      program_.uniform1i("color_map_len", params.color_map_len);
+      program_.uniform3fv("color_map", params.color_map,params.color_map_len);
+
       vao_.bind();
       glDrawArrays(GL_POINTS, 0, cast(int) disks.length ); 
       vao_.unbind();    
@@ -135,62 +149,33 @@ layout(location = 0) in vec2 position;
 layout(location = 1) in vec2 quadCoordIn;
 layout(location = 2) in float disk_size_in;
 layout(location = 3) in float color_in;
-// bool disk_enabled;
-
-uniform float alpha;
-uniform vec2 vis_min_max;
-uniform mat4 mvp;
 
 out VS_OUT {
     float disk_size;
-    vec3 color;
-    mat4 mvp;
+    float color;
 } vs_out;
-
-out float color;
-
-vec3 HeatMapColor(float value, float minValue, float maxValue)
-{
-    #define HEATMAP_COLORS_COUNT 6
-    vec3 colors[HEATMAP_COLORS_COUNT];
-    
-    colors[0] = vec3(0.32, 0.00, 0.32);
-    colors[1] = vec3(0.00, 0.00, 1.00);
-    colors[2] = vec3(0.00, 1.00, 0.00);
-    colors[3] = vec3(1.00, 1.00, 0.00);
-    colors[4] = vec3(1.00, 0.60, 0.00);
-    colors[5] = vec3(1.00, 0.00, 0.00);
-    
-    float ratio=(HEATMAP_COLORS_COUNT-1.0)*clamp((value-minValue)/(maxValue-minValue),0.0,1.0);
-    float indexMin=floor(ratio);
-    float indexMax=min(indexMin+1,HEATMAP_COLORS_COUNT-1);
-    return mix(colors[int(indexMin)], colors[int(indexMax)], ratio-indexMin);
-}
-
 
 void main() {
     vs_out.disk_size = disk_size_in;
-    vs_out.color = HeatMapColor(color_in, vis_min_max.x, vis_min_max.y);
-    vs_out.mvp = mvp;
+    vs_out.color = color_in;
     gl_Position = vec4(position,0.0,1.0); 
 }
 
 geometry:
+
+uniform mat4 mvp;
 
 layout (points) in;
 layout (triangle_strip, max_vertices = 4) out;
 
 in VS_OUT {
     float disk_size;
-    vec3 color;
-    mat4 mvp;
+    float color;
 } gs_in[];
 
 out vec2 quadCoord;
 out float disk_size;
-out vec3 fColor;
-
-//uniform vec2 screen_hw;
+out float fColor;
 
 void build_quad()
 {    
@@ -198,19 +183,19 @@ void build_quad()
     fColor = gs_in[0].color;
 
     quadCoord = vec2(-1.0, -1.0) * 0.5;
-    gl_Position = gs_in[0].mvp * (gl_in[0].gl_Position + ( vec4( vec2(-1.0, -1.0) * gs_in[0].disk_size, 0.0,1.0))); // 1:bottom-left   
+    gl_Position = mvp * (gl_in[0].gl_Position + ( vec4( vec2(-1.0, -1.0) * gs_in[0].disk_size, 0.0,1.0))); // 1:bottom-left   
     EmitVertex();   
 
     quadCoord = vec2( 1.0, -1.0) * 0.5;
-    gl_Position = gs_in[0].mvp * (gl_in[0].gl_Position + ( vec4( vec2( 1.0, -1.0) * gs_in[0].disk_size, 0.0,1.0))); // 2:bottom-right
+    gl_Position = mvp * (gl_in[0].gl_Position + ( vec4( vec2( 1.0, -1.0) * gs_in[0].disk_size, 0.0,1.0))); // 2:bottom-right
     EmitVertex();
 
     quadCoord = vec2(-1.0,  1.0) * 0.5;
-    gl_Position = gs_in[0].mvp * (gl_in[0].gl_Position + ( vec4( vec2(-1.0,  1.0) * gs_in[0].disk_size, 0.0,1.0))); // 3:top-left
+    gl_Position = mvp * (gl_in[0].gl_Position + ( vec4( vec2(-1.0,  1.0) * gs_in[0].disk_size, 0.0,1.0))); // 3:top-left
     EmitVertex();
 
     quadCoord = vec2( 1.0,  1.0) * 0.5;
-    gl_Position = gs_in[0].mvp * (gl_in[0].gl_Position + ( vec4( vec2( 1.0,  1.0) * gs_in[0].disk_size, 0.0,1.0))); // 4:top-right
+    gl_Position = mvp * (gl_in[0].gl_Position + ( vec4( vec2( 1.0,  1.0) * gs_in[0].disk_size, 0.0,1.0))); // 4:top-right
     EmitVertex();
 
     EndPrimitive();
@@ -222,15 +207,24 @@ void main() {
 
 fragment:
 
-  // global input variables
   uniform float alpha;
+  uniform vec2 vis_min_max;
   uniform float border_size;
-  // uniform vec2  screen_hw;
+  uniform vec3 color_map[10];
+  uniform int color_map_len;
 
   in vec2  quadCoord;
   in float disk_size;
-  in vec3  fColor;
+  in float  fColor;
   out vec4 outputColor;
+
+  vec3 HeatMapColor(float value, float minValue, float maxValue)
+  {
+      float ratio=(color_map_len-1.0)*clamp((value-minValue)/(maxValue-minValue),0.0,1.0);
+      float indexMin=floor(ratio);
+      float indexMax=min(indexMin+1,color_map_len-1);
+      return mix(color_map[int(indexMin)], color_map[int(indexMax)], ratio-indexMin);
+  }
 
   float clamp2(float v,float vmin,float vmax,float cmin,float cmax) {
       return clamp( (v-vmin) / (vmax-vmin), cmin, cmax);
@@ -241,11 +235,13 @@ fragment:
       float disk_r = disk_size / 2.0;
       float r = sqrt(pow(quadCoord.x,2) + pow(quadCoord.y,2)) * 2.0 * disk_r;
       //float border_size = 5.0;
+      vec3 disk_color = HeatMapColor(fColor, vis_min_max.x, vis_min_max.y);
       vec3 bordercolor = vec3(0.0f,0.1f,0.2f);
 
-      float al = clamp2(r, disk_r , disk_r - 1.0, 0.0, 1.0); 
+      float al = clamp2(r, disk_r , disk_r - 1.0, 0.0, 1.0);
       float mix_ar = clamp2(r, disk_r - border_size, disk_r - 1.0 - border_size, 0.0, 1.0); 
-      outputColor = vec4(mix(bordercolor,fColor, mix_ar), al * alpha);
+
+      outputColor = vec4(mix(bordercolor, disk_color, mix_ar), al * alpha);
 
   }
 };
