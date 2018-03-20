@@ -1,32 +1,51 @@
+DESIgn model visualisation tool
+-------------------------------
+
+This is a software to realtime visualisation of output of (DESIgn Ice Floe model)[http://herman.ocean.ug.edu.pl/LIGGGHTSseaice.html].
+
+Main goal of the software is to visualize ice floes disks 50k+@30fps, this is done using GPU utilising OpenCL shaders.
+
+Required Hardware
+============
+
+Main requirement is GPU Card, 3.2 OpenGL with 1.5 GLSL (512MB GPU ram is suficient)
+
+Tested on:
+- Nvidia Quadro FX 580
+- Nvidia Quadro FX 3800
+
+Required Software
+
+Tested on
+- Linux (Ubuntu 16.04 LTS 64bit)
+- Windows 7 64bit
+
 1. Toolchain 
+Required:
+- git
+- dmd 64bit (dlang compiler)
+- gtk 64bit runtime 3.22
 
 1.1 DMD compiler
-	https://dlang.org/download.html
-	
-	One have to install: dmd, dub
-    On windows64bit (dub build --arch=x86_64)
+
+https://dlang.org/download.html
+
+To build on windows64bit: `dub build --arch=x86_64`
+   
+2. Getting source and building
     
-2. Getting source
-
-*Build tree view:*
-
- - ./design_io (library repo)
- - ./design_vistool (this repo)
-
-    GetSource and build
-    
-    mkdir design_vis_root
-    cd design_vis_root
-    git clone design_io_git_url.git
-    git clone design_vistool_git_url.git
+```lang=d
+    git clone --recurse-submodules git@github.com:qbazd/design_vistool.git
     cd design_vistool
-    git submodule update --init --recursive
     dub build 
     dub build --arch=x86_64 #on windows 64bit version
+```
 
-3. Building
+3. Test environment
 
 Test build log
+
+```lang=d
 
     # dmd --version 
     DMD64 D Compiler v2.077.1
@@ -46,3 +65,4 @@ Test build log
     To force a rebuild of up-to-date targets, run again with --force.
     Running ./design_vistool
 
+```
