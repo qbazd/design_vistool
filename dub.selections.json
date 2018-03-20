@@ -3,7 +3,7 @@
 	"versions": {
 		"derelict-gl3": "2.0.0-beta.5",
 		"derelict-util": "3.0.0-beta.2",
-		"design_io": {"path":"../design_io"},
+		"design_io": {"path":"design_io"},
 		"gl3n": "1.3.1",
 		"gtk-d": "3.7.5"
 	}
