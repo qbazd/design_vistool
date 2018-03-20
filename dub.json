@@ -5,19 +5,30 @@
 	],
 	"description": "DESIgn visualisation tool",
     "copyright": "Copyright © 2017, Jakub Zdroik",
-    "license": "proprietary",
-    "lflags-windows": ["-subsystem:windows","-entry:mainCRTStartup"],
+    "license": "MIT",
     "sourcePaths": ["./source","./glamour/glamour"],
-    "versions": [ "Derelict3", "gl3n" , "console"],
     "dependencies": {
         "design_io": {
             "version": "~master",
-            "path": "../design_io"
+            "path": "design_io"
         },
-        "gtk-d:gtkd": "~>3.6.0",
+        "gtk-d:gtkd": "~>3.7.0",
         "gl3n": "~>1.3.1",
         "derelict-gl3": "~>2.0.0-beta"
-    }
-
+    },
+    "configurations": [
+        {
+            "name": "gui",
+            "targetType": "executable",
+            "platforms": ["linux", "windows"],
+            "versions": [ "Derelict3", "gl3n" ]
+        },
+        {
+            "name": "windows-without-console",
+            "targetType": "executable",
+            "lflags-windows": ["-subsystem:windows","-entry:mainCRTStartup"],
+            "versions": [ "Derelict3", "gl3n" , "noconsole"]
+        }
+    ]
 
 }
