@@ -25,6 +25,7 @@ import gtk.MenuItem;
 import gtk.Widget;
 import gtk.MenuBar;
 import glib.Timeout;
+import glib.Idle;
 
 /+
 import gtk.Notebook;
@@ -185,7 +186,6 @@ class MainWindow : ApplicationWindow
   HScale timestep_hscale;
 
   glVisWidget glvis;
-
   designVisToolController dvtc;
   Timeout animationUpdateTimeout;
 
@@ -417,6 +417,8 @@ class MainWindow : ApplicationWindow
       //dataset = new DataSet();
 
       dvtc.importDataset(filename);
+      // dvtc.openDataset(filename);
+      // Idle(buffer_refiller);
 
       GC.collect();
 
