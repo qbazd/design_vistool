@@ -1,3 +1,8 @@
 [submodule "glamour"]
 	path = glamour
 	url = https://github.com/qbazd/glamour.git
+	branch = master
+[submodule "design_io"]
+	path = design_io
+	url = https://github.com/qbazd/design_io.git
+	branch = master
